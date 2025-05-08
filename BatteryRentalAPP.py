@@ -94,13 +94,13 @@ def return_battery(battery_id):
     c = conn.cursor()
     c.execute("UPDATE battery SET status = 'available' WHERE id = ? AND status = 'rented'", (battery_id,))
     if c.rowcount > 0:
-        c.execute("SELECT id, start_time FROM rental_log WHERE battery_id = ? AND action = 'rent' ORDER BY id DESC LIMIT 1", (battery_id,))
-        last_rent = c.fetchone()
-        if last_rent:
-            rent_id, start_time = last_rent
-            start_dt = datetime.fromisoformat(start_time)
+        # get last rent start_time
+        c.execute("SELECT start_time FROM rental_log WHERE battery_id = ? AND user_id = ? AND action = 'rent' ORDER BY id DESC LIMIT 1", (battery_id, user_id))
+        row = c.fetchone()
+        if row and row[0]:
+            start_dt = datetime.fromisoformat(row[0])
             duration = int((now - start_dt).total_seconds() // 60)
-            fee = max(1000, duration * 100)
+            fee = max(500, duration * 100)
             c.execute("INSERT INTO rental_log (battery_id, user_id, action, timestamp, end_time, duration, fee) VALUES (?, ?, 'return', ?, ?, ?, ?)",
                       (battery_id, user_id, now.isoformat(), now.isoformat(), duration, fee))
     conn.commit()
