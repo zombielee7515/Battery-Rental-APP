@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head>
+    <title>Battery Rental</title>
+</head>
+<body>
+    <h1>Battery Rental App</h1>
+    <table border="1">
+        <tr><th>ID</th><th>Status</th><th>Action</th></tr>
+        {% for b in batteries %}
+        <tr>
+            <td>{{ b[0] }}</td>
+            <td>{{ b[1] }}</td>
+            <td>
+                {% if b[1] == 'available' %}
+                    <a href="/rent/{{ b[0] }}">Rent</a>
+                {% else %}
+                    <a href="/return/{{ b[0] }}">Return</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
