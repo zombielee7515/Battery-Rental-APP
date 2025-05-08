@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Admin Panel</h1>
+    <p><a href="/">Back to Home</a></p>
+    <h2>All Batteries</h2>
+    <form method="post" action="/admin/add_battery"><button type="submit">Add New Battery</button></form>
+    <table>
+        <tr><th>ID</th><th>Status</th><th>Action</th></tr>
+        {% for b in batteries %}
+        <tr>
+            <td>{{ b[0] }}</td>
+            <td>{{ b[1] }}</td>
+            <td><a href="/admin/delete_battery/{{ b[0] }}">Delete</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h2>Rental Log</h2>
+    <table>
+        <tr><th>Battery ID</th><th>User ID</th><th>Action</th><th>Timestamp</th><th>Duration</th><th>Fee</th></tr>
+        {% for log in logs %}
+        <tr>
+            <td>{{ log[0] }}</td>
+            <td>{{ log[1] }}</td>
+            <td>{{ log[2] }}</td>
+            <td>{{ log[3] }}</td>
+            <td>{{ log[4] or '' }}</td>
+            <td>{{ log[5] or '' }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
